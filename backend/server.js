@@ -27,10 +27,6 @@ app.use('/api/analytics', require('./routes/analytics'));
 app.use('/api/activity', require('./routes/activity'));
 app.use('/api/subscriptions', require('./routes/subscriptions'));
 
-// ── AI & Veronica ────────────────────────────────────────────────────────────
-app.use('/api/ai', require('./routes/ai'));
-app.use('/api/veronica', require('./routes/veronica'));
-
 // ── Feature 2: Standups ──────────────────────────────────────────────────────
 app.use('/api/standups', require('./routes/standups'));
 
