@@ -7,12 +7,7 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production'
-    ? [process.env.CLIENT_URL, /\.netlify\.app$/, 'https://aikanbantracker.netlify.app']
-    : '*',
-  credentials: true
-}));
+app.use(cors({ origin: '*', credentials: false }));
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
