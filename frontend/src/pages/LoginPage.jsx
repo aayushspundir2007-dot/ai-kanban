@@ -3,11 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import { SparklesIcon, EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
-import { GoogleLogin } from '@react-oauth/google';
-import { authAPI } from '../services/api';
 
 export default function LoginPage() {
-  const { login, loginWithGoogle } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
@@ -23,16 +21,6 @@ export default function LoginPage() {
     } catch (err) {
       toast.error(err.response?.data?.message || 'Invalid credentials');
     } finally { setLoading(false); }
-  };
-
-  const handleGoogleSuccess = async (credentialResponse) => {
-    try {
-      await loginWithGoogle(credentialResponse.credential);
-      toast.success('Welcome!');
-      navigate('/dashboard');
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Google sign-in failed');
-    }
   };
 
   const quickLogin = (email) => setForm({ email, password: 'password123' });
@@ -107,26 +95,6 @@ export default function LoginPage() {
               {loading ? <span className="flex items-center gap-2"><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />Signing in...</span> : 'Sign In'}
             </button>
           </form>
-
-          {/* Divider */}
-          <div className="flex items-center gap-3 my-5">
-            <div className="flex-1 h-px bg-gray-200" />
-            <span className="text-xs text-gray-400 font-medium">or continue with</span>
-            <div className="flex-1 h-px bg-gray-200" />
-          </div>
-
-          {/* Google Sign In */}
-          <div className="flex justify-center">
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={() => toast.error('Google sign-in failed')}
-              theme="outline"
-              size="large"
-              width="100%"
-              text="signin_with"
-              shape="rectangular"
-            />
-          </div>
 
           {/* Demo accounts */}
           <div className="mt-6 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm">

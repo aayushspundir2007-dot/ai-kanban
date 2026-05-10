@@ -3,10 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import { SparklesIcon } from '@heroicons/react/24/outline';
-import { GoogleLogin } from '@react-oauth/google';
 
 export default function RegisterPage() {
-  const { register, loginWithGoogle } = useAuth();
+  const { register } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: '', email: '', password: '', role: 'student', department: '', enrollmentId: '' });
   const [loading, setLoading] = useState(false);
@@ -24,16 +23,6 @@ export default function RegisterPage() {
       toast.error(err.response?.data?.message || 'Registration failed');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleGoogleSuccess = async (credentialResponse) => {
-    try {
-      await loginWithGoogle(credentialResponse.credential);
-      toast.success('Welcome!');
-      navigate('/dashboard');
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Google sign-in failed');
     }
   };
 
@@ -89,23 +78,6 @@ export default function RegisterPage() {
               {loading ? 'Creating account...' : 'Create Account'}
             </button>
           </form>
-
-          <div className="flex items-center gap-3 my-4">
-            <div className="flex-1 h-px bg-gray-200" />
-            <span className="text-xs text-gray-400 font-medium">or</span>
-            <div className="flex-1 h-px bg-gray-200" />
-          </div>
-
-          <div className="flex justify-center">
-            <GoogleLogin
-              onSuccess={handleGoogleSuccess}
-              onError={() => toast.error('Google sign-in failed')}
-              theme="outline"
-              size="large"
-              text="signup_with"
-              shape="rectangular"
-            />
-          </div>
 
           <p className="text-sm text-center text-gray-500 mt-4">
             Already have an account?{' '}
