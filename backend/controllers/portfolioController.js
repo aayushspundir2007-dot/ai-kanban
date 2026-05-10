@@ -2,10 +2,7 @@ const Portfolio = require('../models/Portfolio');
 const Project = require('../models/Project');
 const Task = require('../models/Task');
 const ContributionMatrix = require('../models/ContributionMatrix');
-const OpenAI = require('openai');
 const crypto = require('crypto');
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 // ─── Generate portfolio (Feature 11) ─────────────────────────────────────────
 exports.generatePortfolio = async (req, res) => {
@@ -59,13 +56,7 @@ Keep it professional, suitable for a LinkedIn/resume portfolio.`;
 
     let aiSummary = 'Portfolio generated from project data.';
     try {
-      const response = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
-        messages: [{ role: 'user', content: prompt }],
-        temperature: 0.6,
-        max_tokens: 600
-      });
-      aiSummary = response.choices[0].message.content;
+      // AI summary disabled
     } catch { /* use default */ }
 
     // Extract skills from tasks

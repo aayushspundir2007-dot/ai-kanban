@@ -1,9 +1,6 @@
 const router = require('express').Router();
 const Quiz = require('../models/Quiz');
-const OpenAI = require('openai');
 const { protect, authorize, premiumOnly } = require('../middleware/auth');
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 // Get quizzes for class
 router.get('/class/:classId', protect, async (req, res) => {
@@ -22,26 +19,9 @@ router.post('/', protect, authorize('faculty', 'admin'), async (req, res) => {
   } catch (err) { res.status(500).json({ message: err.message }); }
 });
 
-// AI generate quiz questions
+// AI generate quiz questions (disabled)
 router.post('/ai-generate', protect, premiumOnly, async (req, res) => {
-  try {
-    const { topic, numQuestions = 5, difficulty = 'medium' } = req.body;
-    const prompt = `Generate ${numQuestions} multiple choice questions about "${topic}" at ${difficulty} difficulty for university students.
-Return ONLY valid JSON array:
-[{"question":"...","options":["A","B","C","D"],"correctAnswer":0,"explanation":"...","points":1}]
-correctAnswer is the index (0-3) of the correct option.`;
-
-    const response = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      messages: [{ role: 'user', content: prompt }],
-      temperature: 0.7
-    });
-
-    const content = response.choices[0].message.content;
-    const match = content.match(/\[[\s\S]*\]/);
-    const questions = match ? JSON.parse(match[0]) : [];
-    res.json({ questions });
-  } catch (err) { res.status(500).json({ message: err.message }); }
+  res.status(503).json({ message: 'AI quiz generation is currently unavailable.' });
 });
 
 // Submit quiz attempt

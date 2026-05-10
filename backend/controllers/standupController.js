@@ -1,9 +1,6 @@
 const StandupReport = require('../models/StandupReport');
 const Task = require('../models/Task');
 const Notification = require('../models/Notification');
-const OpenAI = require('openai');
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 function getWeekNumber(date = new Date()) {
   const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
@@ -52,50 +49,9 @@ exports.submitStandup = async (req, res) => {
   } catch (err) { res.status(500).json({ message: err.message }); }
 };
 
-// ─── AI Summary generation ────────────────────────────────────────────────────
+// ─── AI Summary generation (disabled - no OpenAI key) ────────────────────────
 async function generateAISummary(standupId, answers, snapshot, studentName) {
-  try {
-    const prompt = `You are analyzing a student's weekly standup report for an academic project.
-
-Student: ${studentName}
-Standup Answers:
-- What they did: "${answers.didLastWeek}"
-- Next steps: "${answers.nextSteps}"  
-- Blockers: "${answers.blockers}"
-
-Actual Board Activity This Week:
-- Tasks completed: ${snapshot.tasksCompleted}
-- Tasks moved to in-progress: ${snapshot.tasksMovedToProgress}
-- Hours logged: ${snapshot.totalHoursLogged.toFixed(1)}h
-
-Analyze and return JSON:
-{
-  "summary": "2-3 sentence faculty-facing summary",
-  "discrepancyFlags": ["flag if answers don't match board activity"],
-  "sentimentScore": -1 to 1,
-  "riskLevel": "low|medium|high",
-  "recommendation": "one actionable suggestion for faculty"
-}`;
-
-    const response = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      messages: [{ role: 'user', content: prompt }],
-      temperature: 0.3
-    });
-
-    const content = response.choices[0].message.content;
-    const match = content.match(/\{[\s\S]*\}/);
-    if (match) {
-      const result = JSON.parse(match[0]);
-      await StandupReport.findByIdAndUpdate(standupId, {
-        aiSummary: result.summary,
-        discrepancyFlags: result.discrepancyFlags || [],
-        sentimentScore: result.sentimentScore || 0
-      });
-    }
-  } catch (err) {
-    console.error('Standup AI error:', err.message);
-  }
+  // AI disabled
 }
 
 // ─── Get standups for project (faculty view) ──────────────────────────────────

@@ -2,9 +2,6 @@ const Project = require('../models/Project');
 const Task = require('../models/Task');
 const StandupReport = require('../models/StandupReport');
 const Comment = require('../models/Comment');
-const OpenAI = require('openai');
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 // ─── Calculate Project Health Score (Feature 6) ───────────────────────────────
 exports.getHealthScore = async (req, res) => {

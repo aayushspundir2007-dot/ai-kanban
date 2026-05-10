@@ -2,9 +2,6 @@ const ContributionMatrix = require('../models/ContributionMatrix');
 const Task = require('../models/Task');
 const Project = require('../models/Project');
 const Comment = require('../models/Comment');
-const OpenAI = require('openai');
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 // ─── Calculate contribution for all members ───────────────────────────────────
 exports.calculateContribution = async (req, res) => {
@@ -94,13 +91,7 @@ Return JSON array: [{"grade": "A|B|C|D|F", "justification": "2 sentence explanat
 
     let grades = results.map(() => ({ grade: 'B', justification: 'Contribution calculated from task metrics.' }));
     try {
-      const aiRes = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
-        messages: [{ role: 'user', content: summaryPrompt }],
-        temperature: 0.3
-      });
-      const match = aiRes.choices[0].message.content.match(/\[[\s\S]*\]/);
-      if (match) grades = JSON.parse(match[0]);
+      // AI grading disabled
     } catch { /* use defaults */ }
 
     // Save to DB

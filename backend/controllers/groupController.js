@@ -1,8 +1,5 @@
 const GroupFormation = require('../models/GroupFormation');
 const User = require('../models/User');
-const OpenAI = require('openai');
-
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 // ─── AI Group Formation (Feature 10) ─────────────────────────────────────────
 exports.generateGroups = async (req, res) => {
@@ -28,36 +25,15 @@ exports.generateGroups = async (req, res) => {
       department: s.department
     }));
 
-    const prompt = `You are forming balanced project groups for a university.
+    // Simple round-robin grouping (AI disabled)
+    const shuffled = [...students].sort(() => Math.random() - 0.5);
+    const groups = [];
+    for (let i = 0; i < shuffled.length; i += groupSize) {
+      groups.push(shuffled.slice(i, i + groupSize).map(s => s._id.toString()));
+    }
+    const result = { groups, rationale: 'Groups formed by random balanced assignment.', skillCoverageScore: 70, groupAnalysis: [] };
 
-Project: "${projectTitle}"
-Required skills: ${projectRequirements.map(r => `${r.count}x ${r.skill}(${r.level})`).join(', ')}
-Group size: ${groupSize}
-
-Students:
-${studentData.map((s, i) => `${i + 1}. ${s.name} | Skills: ${s.skills} | Roles: ${s.roles} | Dept: ${s.department}`).join('\n')}
-
-Form ${Math.floor(students.length / groupSize)} balanced groups. Each group should have diverse skills covering the requirements.
-
-Return JSON:
-{
-  "groups": [["studentId1", "studentId2", ...], ...],
-  "rationale": "explanation of grouping strategy",
-  "skillCoverageScore": 0-100,
-  "groupAnalysis": [{"groupIndex": 0, "strengths": "...", "gaps": "..."}]
-}`;
-
-    const response = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      messages: [{ role: 'user', content: prompt }],
-      temperature: 0.4
-    });
-
-    const content = response.choices[0].message.content;
-    const match = content.match(/\{[\s\S]*\}/);
-    const result = match ? JSON.parse(match[0]) : null;
-
-    if (!result) return res.status(500).json({ message: 'AI failed to generate groups' });
+    if (!result) return res.status(500).json({ message: 'Failed to generate groups' });
 
     // Map IDs back to student objects
     const groupsWithStudents = result.groups.map(group =>
