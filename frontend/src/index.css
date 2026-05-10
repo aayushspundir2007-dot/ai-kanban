@@ -26,8 +26,44 @@
 /* Custom scrollbar */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { @apply bg-transparent; }
-::-webkit-scrollbar-thumb { @apply bg-gray-200 rounded-full; }
-::-webkit-scrollbar-thumb:hover { @apply bg-gray-300; }
+::-webkit-scrollbar-thumb { @apply bg-gray-200 rounded-full dark:bg-gray-700; }
+::-webkit-scrollbar-thumb:hover { @apply bg-gray-300 dark:bg-gray-600; }
+
+/* ── Global dark mode overrides ─────────────────────────────────────────── */
+.dark h1, .dark h2, .dark h3, .dark h4 { @apply text-gray-100; }
+.dark p { color: inherit; }
+
+/* Text colors */
+.dark .text-gray-900 { @apply !text-gray-100; }
+.dark .text-gray-800 { @apply !text-gray-200; }
+.dark .text-gray-700 { @apply !text-gray-300; }
+.dark .text-gray-600 { @apply !text-gray-400; }
+.dark .text-gray-500 { @apply !text-gray-400; }
+
+/* Backgrounds */
+.dark .bg-white { @apply !bg-gray-900; }
+.dark .bg-gray-50 { @apply !bg-gray-900; }
+.dark .bg-gray-100 { @apply !bg-gray-800; }
+.dark .bg-slate-50 { @apply !bg-gray-950; }
+
+/* Borders */
+.dark .border-gray-100 { @apply !border-gray-800; }
+.dark .border-gray-200 { @apply !border-gray-700; }
+
+/* Hover backgrounds */
+.dark .hover\:bg-gray-50:hover { @apply !bg-gray-800; }
+.dark .hover\:bg-gray-100:hover { @apply !bg-gray-800; }
+
+/* Kanban columns */
+.dark .bg-slate-50 { @apply !bg-gray-900; }
+.dark .bg-blue-50 { @apply !bg-blue-950; }
+.dark .bg-red-50 { @apply !bg-red-950; }
+.dark .bg-yellow-50 { @apply !bg-yellow-950; }
+.dark .bg-green-50 { @apply !bg-green-950; }
+
+/* Select and inputs */
+.dark select { @apply !bg-gray-800 !text-gray-100 !border-gray-700; }
+.dark select option { @apply !bg-gray-800 !text-gray-100; }
 
 /* Animations */
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
