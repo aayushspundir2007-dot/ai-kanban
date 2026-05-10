@@ -9,7 +9,7 @@ const app = express();
 
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
-    ? [process.env.CLIENT_URL, /\.netlify\.app$/]
+    ? [process.env.CLIENT_URL, /\.netlify\.app$/, 'https://aikanbantracker.netlify.app']
     : '*',
   credentials: true
 }));
@@ -72,6 +72,10 @@ async function startServer() {
   let mongoUri = process.env.MONGO_URI;
 
   if (!mongoUri || mongoUri.includes('placeholder')) {
+    if (process.env.NODE_ENV === 'production') {
+      console.error('ERROR: MONGO_URI is required in production');
+      process.exit(1);
+    }
     console.log('Starting in-memory MongoDB...');
     const { MongoMemoryServer } = require('mongodb-memory-server');
     const mongod = await MongoMemoryServer.create();
