@@ -1,13 +1,14 @@
 import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import NotificationBell from './NotificationBell';
 import {
   HomeIcon, FolderIcon, ChartBarIcon, UsersIcon,
   UserCircleIcon, Bars3Icon, XMarkIcon, SparklesIcon,
   AcademicCapIcon, ClipboardDocumentListIcon, VideoCameraIcon,
   BellIcon, Cog6ToothIcon, ArrowRightOnRectangleIcon,
-  StarIcon, BookOpenIcon
+  StarIcon, BookOpenIcon, SunIcon, MoonIcon
 } from '@heroicons/react/24/outline';
 
 const navGroups = [
@@ -37,6 +38,7 @@ const navGroups = [
 
 export default function Layout() {
   const { user, logout, isPremium } = useAuth();
+  const { dark, toggle } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -127,7 +129,7 @@ export default function Layout() {
   );
 
   return (
-    <div className="flex h-screen bg-slate-50">
+    <div className="flex h-screen bg-slate-50 dark:bg-gray-950">
       {/* Desktop Sidebar */}
       <aside className="hidden lg:flex flex-col w-64 flex-shrink-0 shadow-xl">
         <SidebarContent />
@@ -149,19 +151,24 @@ export default function Layout() {
       {/* Main */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Topbar */}
-        <header className="bg-white border-b border-gray-100 px-4 lg:px-6 py-3 flex items-center justify-between flex-shrink-0 shadow-sm">
+        <header className="bg-white border-b border-gray-100 px-4 lg:px-6 py-3 flex items-center justify-between flex-shrink-0 shadow-sm dark:bg-gray-900 dark:border-gray-800">
           <div className="flex items-center gap-3">
             <button className="lg:hidden p-2 rounded-xl hover:bg-gray-100 transition-colors" onClick={() => setSidebarOpen(true)}>
               <Bars3Icon className="w-5 h-5 text-gray-600" />
             </button>
             {/* Breadcrumb */}
             <div className="hidden sm:block">
-              <p className="text-sm font-semibold text-gray-800 capitalize">
+              <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 capitalize">
                 {location.pathname.split('/')[1] || 'Dashboard'}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <button onClick={toggle}
+              className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              title={dark ? 'Switch to light mode' : 'Switch to dark mode'}>
+              {dark ? <SunIcon className="w-5 h-5 text-yellow-400" /> : <MoonIcon className="w-5 h-5 text-gray-500" />}
+            </button>
             <NotificationBell />
             <div className="flex items-center gap-2 pl-2 border-l border-gray-100">
               <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-violet-400 to-indigo-500 flex items-center justify-center text-white font-bold text-sm">
