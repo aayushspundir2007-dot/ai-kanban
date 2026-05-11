@@ -110,7 +110,7 @@ Return JSON array: [{"grade": "A|B|C|D|F", "justification": "2 sentence explanat
           lastCalculatedAt: new Date()
         },
         { upsert: true, new: true }
-      );
+      ).populate('student', 'name avatar department enrollmentId');
       saved.push(entry);
     }
 
