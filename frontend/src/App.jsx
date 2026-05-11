@@ -19,6 +19,7 @@ import StakeholderPage from './pages/StakeholderPage';
 import GroupFormationPage from './pages/GroupFormationPage';
 import PortfolioPage from './pages/PortfolioPage';
 import MeetingsPage from './pages/MeetingsPage';
+import LandingPage from './pages/LandingPage';
 
 function ProtectedRoute({ children, roles }) {
   const { user, loading } = useAuth();
@@ -39,7 +40,7 @@ function AppRoutes() {
       <Route path="/login" element={user ? <Navigate to="/dashboard" /> : <LoginPage />} />
       <Route path="/register" element={user ? <Navigate to="/dashboard" /> : <RegisterPage />} />
       <Route path="/pricing" element={<PricingPage />} />
-      <Route path="/" element={<Navigate to="/dashboard" />} />
+      <Route path="/" element={user ? <Navigate to="/dashboard" /> : <LandingPage />} />
 
       <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
         <Route path="/dashboard" element={<DashboardPage />} />
