@@ -9,7 +9,7 @@ import { format } from 'date-fns';
 import {
   ChatBubbleLeftIcon,
   CheckBadgeIcon, XCircleIcon, ArrowTopRightOnSquareIcon,
-  PaperClipIcon
+  PaperClipIcon, UserGroupIcon
 } from '@heroicons/react/24/outline';
 
 export default function ProjectDetailPage() {
@@ -82,6 +82,9 @@ export default function ProjectDetailPage() {
           </div>
           <Link to={`/projects/${id}/kanban`} className="btn-primary flex-shrink-0">
             <ArrowTopRightOnSquareIcon className="w-4 h-4" /> Open Kanban
+          </Link>
+          <Link to={`/projects/${id}/contribution`} className="btn-secondary flex-shrink-0">
+            <UserGroupIcon className="w-4 h-4" /> Contributions
           </Link>
         </div>
 
