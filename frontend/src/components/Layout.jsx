@@ -3,12 +3,13 @@ import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import NotificationBell from './NotificationBell';
+import { usePWAInstall } from '../hooks/usePWAInstall';
 import {
   HomeIcon, FolderIcon, ChartBarIcon, UsersIcon,
   UserCircleIcon, Bars3Icon, XMarkIcon, SparklesIcon,
   AcademicCapIcon, ClipboardDocumentListIcon, VideoCameraIcon,
   BellIcon, Cog6ToothIcon, ArrowRightOnRectangleIcon,
-  StarIcon, BookOpenIcon, SunIcon, MoonIcon
+  StarIcon, BookOpenIcon, SunIcon, MoonIcon, ArrowDownTrayIcon
 } from '@heroicons/react/24/outline';
 
 const navGroups = [
@@ -42,6 +43,7 @@ export default function Layout() {
   const navigate = useNavigate();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { canInstall, install } = usePWAInstall();
 
   const handleLogout = () => { logout(); navigate('/login'); };
 
@@ -164,6 +166,16 @@ export default function Layout() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            {canInstall && (
+              <button
+                onClick={install}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold transition-colors shadow-sm"
+                title="Install AcademiKan app"
+              >
+                <ArrowDownTrayIcon className="w-4 h-4" />
+                <span className="hidden sm:inline">Install App</span>
+              </button>
+            )}
             <button onClick={toggle}
               className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               title={dark ? 'Switch to light mode' : 'Switch to dark mode'}>
